@@ -1,6 +1,7 @@
 import pandas as pd
 import json, requests, psycopg2
 from psycopg2.extras import execute_values
+from datetime import datetime
 
 def convertWei(wei):
     bnb = wei * (1/(10 ** 18))
@@ -35,6 +36,7 @@ def obtenerDatos(file, lastBlock):
         df = pd.DataFrame(results)
         #Convierto de wei a BNB para achicar los valores
         df['Valor'] = df['Valor'].apply(lambda x: convertWei(int(x)))
+        df.insert(14,"Creado",datetime.now())
         #print("Resultados: ", df)
         return df
     except Exception as e:
@@ -77,7 +79,8 @@ def crearTabla(conexion):
             gas_used INTEGER,
             trace_id VARCHAR(100),
             is_error INTEGER,
-            err_code VARCHAR(100)
+            err_code VARCHAR(100),
+            creado date
             )
         """)
         conexion.commit()
@@ -88,10 +91,11 @@ def crearTabla(conexion):
 def insertarDatos(conexion, datos):
     print("Insertando datos obtenidos")
     with conexion.cursor() as cur:
+        datos['Creado'] = datos['Creado'].apply(lambda x: datetime.now())
         execute_values(
             cur,
             '''
-            INSERT INTO bloques (bloque, time_stamp, hash, from_wallet, to_wallet, value, contract_address, input, type, gas, gas_used, trace_id, is_error, err_code)
+            INSERT INTO bloques (bloque, time_stamp, hash, from_wallet, to_wallet, value, contract_address, input, type, gas, gas_used, trace_id, is_error, err_code,creado)
             VALUES %s
             ''',
             datos.values
