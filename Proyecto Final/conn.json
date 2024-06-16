@@ -1,0 +1,11 @@
+{
+    "connection" : {
+        "API_URL" : "https://api.bscscan.com/api",
+        "API_KEY" : "JSUNHW6EEK4Z56YPBGQG55IHNSX1KWSZN4",
+        "REDSHIFT_URL": "data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com",
+        "REDSHIFT_PORT": "5439",
+        "REDSHIFT_PWD": "5W9Nsos3e4",
+        "REDSHIFT_USR": "pcc_pam_coderhouse",
+        "REDSHIFT_DB": "data-engineer-database"
+        }
+    } 
